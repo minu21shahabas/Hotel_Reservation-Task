@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Document</title></head>
+
+      
+
+    
+<body>
+
+    <div>
+        <nav class="navbar navbar-expand-md bg-dark navbar-light text-white">
+            <h6 style="text-align: center;">HOTEL SUNSHINE</h6>
+        </nav>
+        <nav class="navbar navbar-expand-md bg-light navbar-light">
+          <!-- <div>
+            <img class="img-fluid" src="https://m.economictimes.com/thumb/msid-104664550,width-1200,height-1200,resizemode-4,imgsize-1076960/hotel-stocks.jpg" style="width: 20%; height: 20%; border-radius: 0%;" class="rounded">
+            <h5>HOTEL SUNSHINE</h5>
+          </div> -->
+                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <b><a class="nav-link" href="{% url 'roomlist' %}"style="margin-right: 50px;">
+                    Room List
+                 </b></a>            </li>
+              <li class="nav-item">
+                <b><a class="nav-link" href="" style="margin-right: 50px;">
+                  Reservation List
+                </b></a>            </li>
+                <li class="nav-item">
+                    <b><a class="nav-link" id="room" href=""class="btn btn-dark nav-link" data-toggle="modal" data-target="#exampleModal1" style="margin-right: 50px;">
+                      Create Rooms
+                    </b></a>            </li>
+              <li class="nav-item">
+                <b><a class="nav-link" href="{% url 'addreserv' %}" style="margin-right: 50px;">
+                  Create Reservation
+                </b></a>            </li> 
+                <li class="nav-item">
+                  <b><a class="nav-link" id="rooms" href=""class="btn btn-dark nav-link" data-toggle="modal" data-target="#exampleModal" style="margin-right: 50px;">
+                    Create Rooms Category
+                  </b></a>            </li>
+                 
+                    <div class ="buttons" style="@media (max-width: 767px) { max-width:100px; margin:auto; display:block;} display:flex;">
+                    
+                    <li class="nav-item">
+                      <button type="button" id="logout" style="width: 95px;height: 42px;" class="btn btn-dark nav-link" ><a href="" class="nav-link" style="color: rgb(231, 235, 235);text-align: center;padding: 1px; "><b>Logout</b></a></button>
+                    </li>
+                    </div>   
+            </ul>
+          </div>  
+        </nav>
+        <h1><b><ul>ROOM CATEGORY</ul></b></h1>
+        <table border="5px">
+            <thead>
+                <th>Room Category</th>
+                <th>Price</th>
+    
+            </thead>
+            <tbody>
+                {% for c in cat %}
+                <tr>
+                    <td>{{c.name}}</td>
+                    <td>{{c.base_price}}</td>
+                    
+    
+                    <td><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#edit_cat{{c.id}}">
+                     EDIT
+                  </a></td>
+                    <td><a href="">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<form action="{% url 'addcat' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">ADD CATEGORY</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <label>Name</label>
+            <input type="text" name="name" placeholder="enter your name" class="form-control">
+            <label>Base_Price</label>
+            <input type="text" name="price"  class="form-control">
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Done</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</form> 
+
+<!-- create rooms modal -->
+
+<form action="{% url 'addroom' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">ADD ROOMS</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <label>ROOM NUMBER</label>
+          <input type="text" name="rnmbr" placeholder="enter your name" class="form-control">
+          <select class="option" name="category">
+              
+            <option disabled="disabled" selected="selected">--Choose option--</option>
+            {% for c in cat %}
+              <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+          </select>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</form> 
+
+
+
+{%for i in list%}
+<div class="modal fade" id="edit_room{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">EDIT ROOMS</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+      <form action="{% url 'roomediting' i.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        <label>ROOM NUMBER</label>
+        <input type="text" name="rnmbr" value="{{i.room_number}}" class="form-control">
+        <select class="option" name="category">
+            
+          <option disabled="disabled" selected="selected">--Choose option--</option>
+                  {% for r in room %}
+                  {% if r.id == i.category.id %}
+                    <option value="{{r.id}}" selected>{{r.name}}</option>
+                  {% else %}
+                  <option value="{{r.id}}">{{r.name}}</option>
+                  {% endif %}
+                  {% endfor %}
+        </select>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+</form> 
+
+
+
+</body>
+</html>
